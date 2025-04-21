@@ -2,6 +2,7 @@ defmodule Checker.Server do
   @moduledoc """
     Основная часть обработки каждого домена, в отдельном процессе
   """
+  alias Checker.AddingServer
   use GenServer
 
   @timeout 5
@@ -32,7 +33,8 @@ defmodule Checker.Server do
   """
   @spec start_link(binary()) :: :ignore | {:error, any()} | {:ok, pid()}
   def start_link(domain) do
-    domain |> save_domain
+    # domain |> save_domain
+    domain |> check_domain
 
     GenServer.start_link(__MODULE__, domain, name: {:global, domain})
   end
@@ -42,7 +44,8 @@ defmodule Checker.Server do
   """
   @impl true
   def handle_info(:timeout, state) do
-    state |> save_domain
+    # state |> save_domain
+    state |> check_domain
 
     {:noreply, state, :timer.seconds(@timeout)}
   end
@@ -64,23 +67,35 @@ defmodule Checker.Server do
     end
   end
 
+  # @spec save_domain(binary()) :: true
+  # def save_domain(domain) do
+  #   :ets.insert(:domains, {domain, :os.system_time(:second), check_domain(domain)})
+  # end
+
   @doc """
     Сохраняем домен в хранилище
   """
-  @spec save_domain(binary()) :: true
-  def save_domain(domain) do
-    :ets.insert(:domains, {domain, :os.system_time(:second), check_domain(domain)})
+  @spec save_domain(any(), any()) :: true
+  def save_domain(domain, status) do
+    :ets.insert(:domains, {domain, :os.system_time(:second), status})
   end
 
 
   @doc """
-    Проверяем статус домена
+    Проверяем статус домена, отправляя на сервер проверок доменов
   """
   @spec check_domain(binary()) :: :error | :ok
   def check_domain(domain) do
+    case AddingServer.add(domain) do
+      :ok -> :ok
+      :max ->
+        :timer.sleep(500)
+        check_domain(domain)
+      _ -> :error
+    end
     # ping_random()
     # domain |> ping_socket
-    domain |> ping_http
+    # domain |> ping_http
   end
 
   @doc """

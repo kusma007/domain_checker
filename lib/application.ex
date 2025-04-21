@@ -6,6 +6,8 @@ defmodule Checker.Application do
 
     children = [
       {Checker.Supervisor, []},
+      Checker.AddingServer,
+      Checker.CheckingServer,
     ]
 
     opts = [strategy: :one_for_one, name: __MODULE__]

@@ -17,43 +17,43 @@ mix deps.get
 #### Добавить один домен
 
 ```
-Checker.Client.add(domain)
+Checker.Supervisor.add_domain(domain)
 example
-Checker.Client.add("asys.xt-xarid.uz")
+Checker.Supervisor.add("asys.xt-xarid.uz")
 ```
 
 #### Добавить домены из файла
 
 ```
-Checker.Client.add(file)
+Checker.Supervisor.add_from_file(file)
 
 example
-Checker.Client.add("domains_test.txt")
-Checker.Client.add("domains.txt")
+Checker.Supervisor.add_from_file("domains_test.txt")
+Checker.Supervisor.add_from_file("domains.txt")
 ```
 
 ### 2) Просмотр статуса проверок
 
 #### Просмотр всех доменов
 ```
-Checker.Client.status()
+Checker.Supervisor.status()
 ```
 
 #### Просмотр рабочих доменов
 ```
-Checker.Client.status(:ok)
+Checker.Supervisor.status(:ok)
 ```
 
 #### Просмотр не рабочих доменов
 ```
-Checker.Client.status(:error)
+Checker.Supervisor.status(:error)
 ```
 
 #### Просмотр статуса определённого домена
 ```
-Checker.Client.status(domain)
+Checker.Supervisor.status(domain)
 example
-Checker.Client.status("asys.xt-xarid.uz")
+Checker.Supervisor.status("asys.xt-xarid.uz")
 ```
 
 
@@ -61,12 +61,12 @@ Checker.Client.status("asys.xt-xarid.uz")
 
 #### Удаление одного домена из проверок
 ```
-Checker.Client.remove(domain)
+Checker.Supervisor.remove(domain)
 example
-Checker.Client.remove("asys.xt-xarid.uz")
+Checker.Supervisor.remove("asys.xt-xarid.uz")
 ```
 
 #### Удаление всех проверок
 ```
-Checker.Client.remove()
+Checker.Supervisor.remove()
 ```
